@@ -1,9 +1,11 @@
 import React from 'react';
 import './App.css';
 import MeditationSetup from './MeditationSetup.js'
+import MeditationTimer from './MeditationTimer.js'
 import Countdown from 'react-countdown-now'
 import PropTypes from 'prop-types'
 
+// Fix displays on mobile and style
 class App extends React.Component{
   constructor(props) {
     super(props);
@@ -39,14 +41,21 @@ class App extends React.Component{
       });
     }
   render(){
-    //find a cleaner solution to the below code
-    return(
-      <div>
-        {!this.state.isMeditating && <MeditationSetup changeMinutes={this.changeMinutes} startTimer={this.startTimer}></MeditationSetup>}
-        {this.state.isMeditating && <Countdown date={Date.now() + this.state.medTime}/>}
-        {this.state.isMeditating && <button onClick={this.handleCancel}>Cancel</button>}
-      </div>
-    )
+    if(!this.state.isMeditating){
+      return(
+        <div className="container">
+          <MeditationSetup changeMinutes={this.changeMinutes} startTimer={this.startTimer}></MeditationSetup>
+        </div>
+      );
+    }else{
+      return(
+        <div className="container">
+          {/* Setup a wait feature before starting to meditate to tell them to get comfortable etc. */}
+          <MeditationTimer className="jumbotron" date={this.state.medTime} handleCancel={this.handleCancel} medTime={this.state.medTime}/>
+          
+        </div>
+      )
+    }
   }
 }
 
